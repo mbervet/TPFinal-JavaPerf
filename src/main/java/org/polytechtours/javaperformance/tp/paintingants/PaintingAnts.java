@@ -301,17 +301,17 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
         // chaine de parametres de couleur et proba
         StringTokenizer lSTParam = new StringTokenizer(lSTFourmi.nextToken(), "()");
         // lecture de la couleur déposée
-        StringTokenizer lSTCouleurDéposée = new StringTokenizer(lSTParam.nextToken(), ",");
-        R = readIntParameter(lSTCouleurDéposée.nextToken());
+        StringTokenizer lSTCouleurDeposee = new StringTokenizer(lSTParam.nextToken(), ",");
+        R = readIntParameter(lSTCouleurDeposee.nextToken());
         if (R == -1) {
           R = (int) (Math.random() * 256);
         }
 
-        G = readIntParameter(lSTCouleurDéposée.nextToken());
+        G = readIntParameter(lSTCouleurDeposee.nextToken());
         if (G == -1) {
           G = (int) (Math.random() * 256);
         }
-        B = readIntParameter(lSTCouleurDéposée.nextToken());
+        B = readIntParameter(lSTCouleurDeposee.nextToken());
         if (B == -1) {
           B = (int) (Math.random() * 256);
         }
@@ -328,20 +328,20 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
 
         // lecture de la position de la direction de départ et de la taille de
         // la trace
-        StringTokenizer lSTDéplacement = new StringTokenizer(lSTParam.nextToken(), ",");
-        lInit_x = readFloatParameter(lSTDéplacement.nextToken());
+        StringTokenizer lSTDeplacement = new StringTokenizer(lSTParam.nextToken(), ",");
+        lInit_x = readFloatParameter(lSTDeplacement.nextToken());
         if (lInit_x < 0.0 || lInit_x > 1.0) {
           lInit_x = (float) Math.random();
         }
-        lInit_y = readFloatParameter(lSTDéplacement.nextToken());
+        lInit_y = readFloatParameter(lSTDeplacement.nextToken());
         if (lInit_y < 0.0 || lInit_y > 1.0) {
           lInit_y = (float) Math.random();
         }
-        lInitDirection = readIntParameter(lSTDéplacement.nextToken());
+        lInitDirection = readIntParameter(lSTDeplacement.nextToken());
         if (lInitDirection < 0 || lInitDirection > 7) {
           lInitDirection = (int) (Math.random() * 8);
         }
-        lTaille = readIntParameter(lSTDéplacement.nextToken());
+        lTaille = readIntParameter(lSTDeplacement.nextToken());
         if (lTaille < 0 || lTaille > 3) {
           lTaille = (int) (Math.random() * 4);
         }
