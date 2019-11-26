@@ -1,9 +1,11 @@
-package org.polytechtours.javaperformance.tp.paintingants;
+package org.polytechtours.javaperformance.tp.paintingants.model;
 // package PaintingAnts_v3;
 // version : 4.0
 
 import java.awt.Color;
 import java.util.Random;
+
+import org.polytechtours.javaperformance.tp.paintingants.control.PaintingAnts;
 
 public class CFourmi {
   // Tableau des incrementations a effectuer sur la position des fourmis

@@ -1,4 +1,4 @@
-package org.polytechtours.javaperformance.tp.paintingants;
+package org.polytechtours.javaperformance.tp.paintingants.model;
 
 /*
  * CColonie.java
@@ -10,6 +10,8 @@ package org.polytechtours.javaperformance.tp.paintingants;
  * Open. You can then make changes to the template in the Source Editor.
  */
 import java.util.Vector;
+
+import org.polytechtours.javaperformance.tp.paintingants.control.PaintingAnts;
 
 public class CColonie implements Runnable {
 

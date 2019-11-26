@@ -1,4 +1,4 @@
-package org.polytechtours.javaperformance.tp.paintingants;
+package org.polytechtours.javaperformance.tp.paintingants.model;
 // package PaintingAnts_v2;
 
 import java.awt.Canvas;
@@ -11,6 +11,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import org.polytechtours.javaperformance.tp.paintingants.control.PaintingAnts;
 
 /**
  * <p>

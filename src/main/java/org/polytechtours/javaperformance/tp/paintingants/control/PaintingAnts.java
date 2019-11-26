@@ -1,4 +1,4 @@
-package org.polytechtours.javaperformance.tp.paintingants;
+package org.polytechtours.javaperformance.tp.paintingants.control;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,6 +12,10 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.swing.Timer;
+
+import org.polytechtours.javaperformance.tp.paintingants.model.CColonie;
+import org.polytechtours.javaperformance.tp.paintingants.model.CFourmi;
+import org.polytechtours.javaperformance.tp.paintingants.model.CPainting;
 
 public class PaintingAnts extends java.applet.Applet implements Runnable {
   private static final long serialVersionUID = 1L;
