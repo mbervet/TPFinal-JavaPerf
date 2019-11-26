@@ -180,7 +180,7 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
   // cette fonction analyse une chaine :
   // si pStr est un nombre : sa valeur est retournee
   // si pStr est un interval x..y : une valeur au hasard dans [x,y] est
-  // retournée
+  // retournee
   private float readFloatParameter(String pStr) {
     float lMin, lMax, lResult;
     // System.out.println(" chaine pStr: "+pStr);
@@ -206,7 +206,7 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
 
   // =========================================================================
   // cette fonction analyse une chaine :
-  // si pStr est un nombre : sa valeur est retournée
+  // si pStr est un nombre : sa valeur est retournee
   // si pStr est un interval x..y : une valeur au hasard dans [x,y] est
   // retournee
   private int readIntParameter(String pStr) {
@@ -291,7 +291,7 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     lChaine = getParameter("Fourmis");
     if (lChaine != null) {
       // on affiche la chaine de parametres
-      System.out.println("Paramètres:" + lChaine);
+      System.out.println("Parametres:" + lChaine);
 
       // on va compter le nombre de fourmis dans la chaine de parametres :
       lNbFourmis = 0;
