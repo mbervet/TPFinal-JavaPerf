@@ -6,32 +6,32 @@ import java.awt.Color;
 import java.util.Random;
 
 public class CFourmi {
-  // Tableau des incrémentations à effectuer sur la position des fourmis
+  // Tableau des incrementations a effectuer sur la position des fourmis
   // en fonction de la direction du deplacement
   static private int[][] mIncDirection = new int[8][2];
-  // le generateur aléatoire (Random est thread safe donc on la partage)
+  // le generateur aleatoire (Random est thread safe donc on la partage)
   private static Random GenerateurAleatoire = new Random();
-  // couleur déposé par la fourmi
+  // couleur depose par la fourmi
   private Color mCouleurDeposee;
   private float mLuminanceCouleurSuivie;
   // objet graphique sur lequel les fourmis peuvent peindre
   private CPainting mPainting;
-  // Coordonées de la fourmi
+  // Coordonnees de la fourmi
   private int x, y;
   // Proba d'aller a gauche, en face, a droite, de suivre la couleur
   private float[] mProba = new float[4];
-  // Numéro de la direction dans laquelle la fourmi regarde
+  // Numero de la direction dans laquelle la fourmi regarde
   private int mDirection;
-  // Taille de la trace de phéromones déposée par la fourmi
+  // Taille de la trace de pheromones deposee par la fourmi
   private int mTaille;
-  // Pas d'incrémentation des directions suivant le nombre de directions
-  // allouées à la fourmies
+  // Pas d'incrementation des directions suivant le nombre de directions
+  // allouees a la fourmies
   private int mDecalDir;
   // l'applet
   private PaintingAnts mApplis;
-  // seuil de luminance pour la détection de la couleur recherchée
+  // seuil de luminance pour la detection de la couleur recherchee
   private float mSeuilLuminance;
-  // nombre de déplacements de la fourmi
+  // nombre de deplacements de la fourmi
   private long mNbDeplacements;
 
   /*************************************************************************************************
@@ -46,19 +46,19 @@ public class CFourmi {
     mPainting = pPainting;
     mApplis = pApplis;
 
-    // direction de départ
+    // direction de depart
     mDirection = pInitDirection;
 
     // taille du trait
     mTaille = pTaille;
 
     // initialisation des probas
-    mProba[0] = pProbaG; // proba d'aller à gauche
+    mProba[0] = pProbaG; // proba d'aller a gauche
     mProba[1] = pProbaTD; // proba d'aller tout droit
-    mProba[2] = pProbaD; // proba d'aller à droite
+    mProba[2] = pProbaD; // proba d'aller a droite
     mProba[3] = pProbaSuivre; // proba de suivre la couleur
 
-    // nombre de directions pouvant être prises : 2 types de déplacement
+    // nombre de directions pouvant être prises : 2 types de deplacement
     // possibles
     if (pTypeDeplacement == 'd') {
       mDecalDir = 2;
@@ -104,9 +104,9 @@ public class CFourmi {
     dir[1] = 0;
     dir[2] = 0;
 
-    // le tableau dir contient 0 si la direction concernée ne contient pas la
+    // le tableau dir contient 0 si la direction concernee ne contient pas la
     // couleur
-    // à suivre, et 1 sinon (dir[0]=gauche, dir[1]=tt_droit, dir[2]=droite)
+    // a suivre, et 1 sinon (dir[0]=gauche, dir[1]=tt_droit, dir[2]=droite)
     i = modulo(x + CFourmi.mIncDirection[modulo(mDirection - mDecalDir, 8)][0], mPainting.getLargeur());
     j = modulo(y + CFourmi.mIncDirection[modulo(mDirection - mDecalDir, 8)][1], mPainting.getHauteur());
     if (mApplis.mBaseImage != null) {
@@ -139,7 +139,7 @@ public class CFourmi {
       dir[2] = 1;
     }
 
-    // tirage d'un nombre aléatoire permettant de savoir si la fourmi va suivre
+    // tirage d'un nombre aleatoire permettant de savoir si la fourmi va suivre
     // ou non la couleur
     tirage = GenerateurAleatoire.nextFloat();// Math.random();
 
@@ -160,7 +160,7 @@ public class CFourmi {
     prob2 = prob2 / total + prob1;
     prob3 = prob3 / total + prob2;
 
-    // incrémentation de la direction de la fourmi selon la direction choisie
+    // incrementation de la direction de la fourmi selon la direction choisie
     tirage = GenerateurAleatoire.nextFloat();// Math.random();
     if (tirage < prob1) {
       mDirection = modulo(mDirection - mDecalDir, 8);

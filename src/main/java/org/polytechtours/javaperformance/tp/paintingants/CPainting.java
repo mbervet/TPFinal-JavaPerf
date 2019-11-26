@@ -42,7 +42,7 @@ public class CPainting extends Canvas implements MouseListener {
   // Objet ne servant que pour les bloc synchronized pour la manipulation du
   // tableau des couleurs
   private Object mMutexCouleurs = new Object();
-  // tableau des couleurs, il permert de conserver en memoire l'état de chaque
+  // tableau des couleurs, il permert de conserver en memoire l'etat de chaque
   // pixel du canvas, ce qui est necessaire au deplacemet des fourmi
   // il sert aussi pour la fonction paint du Canvas
   private Color[][] mCouleurs;
@@ -108,7 +108,7 @@ public class CPainting extends Canvas implements MouseListener {
   }
 
   /******************************************************************************
-   * Titre : Color getLargeur Description : Cette fonction renvoie la hauteur de
+   * Titre : Color getLargeur Description : Cette fonction renvoie la largeur de
    * la peinture
    ******************************************************************************/
   public int getLargeur() {
@@ -287,7 +287,7 @@ public class CPainting extends Canvas implements MouseListener {
 
   /******************************************************************************
    * Titre : void paint(Graphics g) Description : Surcharge de la fonction qui
-   * est appelé lorsque le composant doit être redessiné
+   * est appele lorsque le composant doit être redessine
    ******************************************************************************/
   @Override
   public void paint(Graphics pGraphics) {
@@ -416,7 +416,7 @@ public class CPainting extends Canvas implements MouseListener {
   }
 
   /******************************************************************************
-   * Titre : setSupendu Description : Cette fonction change l'état de suspension
+   * Titre : setSupendu Description : Cette fonction change l'etat de suspension
    ******************************************************************************/
 
   public void suspendre() {
