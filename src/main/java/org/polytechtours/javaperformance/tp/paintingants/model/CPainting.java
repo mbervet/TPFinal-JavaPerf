@@ -9,9 +9,8 @@ import java.awt.Dimension;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
+import org.polytechtours.javaperformance.tp.paintingants.control.MouseEventManager;
 import org.polytechtours.javaperformance.tp.paintingants.control.PaintingAnts;
 
 /**
@@ -33,7 +32,7 @@ import org.polytechtours.javaperformance.tp.paintingants.control.PaintingAnts;
  * @version 1.0
  */
 
-public class CPainting extends Canvas implements MouseListener {
+public class CPainting extends Canvas {
   private static final long serialVersionUID = 1L;
   // matrice servant pour le produit de convolution
   static private float[][] mMatriceConv9 = new float[3][3];
@@ -56,13 +55,16 @@ public class CPainting extends Canvas implements MouseListener {
   private PaintingAnts mApplis;
 
   private boolean mSuspendu = false;
+  
+  private final MouseEventManager MouseManager = new MouseEventManager(this);
 
   /******************************************************************************
    * Titre : public CPainting() Description : Constructeur de la classe
    ******************************************************************************/
   public CPainting(Dimension pDimension, PaintingAnts pApplis) {
     int i, j;
-    addMouseListener(this);
+    
+    addMouseListener(MouseManager);
 
     mApplis = pApplis;
 
@@ -246,45 +248,9 @@ public class CPainting extends Canvas implements MouseListener {
 
     mSuspendu = false;
   }
-
-  /****************************************************************************/
-  public void mouseClicked(MouseEvent pMouseEvent) {
-    pMouseEvent.consume();
-    if (pMouseEvent.getButton() == MouseEvent.BUTTON1) {
-      // double clic sur le bouton gauche = effacer et recommencer
-      if (pMouseEvent.getClickCount() == 2) {
-        init();
-      }
-      // simple clic = suspendre les calculs et l'affichage
-      mApplis.pause();
-    } else {
-      // bouton du milieu (roulette) = suspendre l'affichage mais
-      // continuer les calculs
-      if (pMouseEvent.getButton() == MouseEvent.BUTTON2) {
-        suspendre();
-      } else {
-        // clic bouton droit = effacer et recommencer
-        // case pMouseEvent.BUTTON3:
-        init();
-      }
-    }
-  }
-
-  /****************************************************************************/
-  public void mouseEntered(MouseEvent pMouseEvent) {
-  }
-
-  /****************************************************************************/
-  public void mouseExited(MouseEvent pMouseEvent) {
-  }
-
-  /****************************************************************************/
-  public void mousePressed(MouseEvent pMouseEvent) {
-
-  }
-
-  /****************************************************************************/
-  public void mouseReleased(MouseEvent pMouseEvent) {
+  
+  public void Pause() {
+	  mApplis.pause();
   }
 
   /******************************************************************************

@@ -22,7 +22,7 @@ public class MouseEventManager implements MouseListener{
 	    	  painting.init();
 	      }
 	      // simple clic = suspendre les calculs et l'affichage
-	      painting.mApplis.pause();
+	      painting.Pause();
 	    } else {
 	      // bouton du milieu (roulette) = suspendre l'affichage mais
 	      // continuer les calculs
