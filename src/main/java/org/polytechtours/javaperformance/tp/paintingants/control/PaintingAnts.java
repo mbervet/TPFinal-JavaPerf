@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.swing.Timer;
 
@@ -38,9 +39,9 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
   private Timer fpsTimer;
 
   /** Fourmis per second :) */
-  private Long fpsCounter = 0L;
+  private AtomicLong fpsCounter = new AtomicLong(0);
   /** stocke la valeur du compteur lors du dernier timer */
-  private Long lastFps = 0L;
+  private AtomicLong lastFps = new AtomicLong(0);
 
   /****************************************************************************/
   /**
@@ -104,8 +105,8 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
 	  return mPainting;
   }
   
-  public synchronized void IncrementFpsCounter() {
-    fpsCounter++;
+  public void IncrementFpsCounter() {
+    fpsCounter.incrementAndGet();
   }
 
   /****************************************************************************/
@@ -285,8 +286,8 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
   /**
    * update Fourmis per second
    */
-  private synchronized void updateFPS() {
-    lastFps = fpsCounter;
-    fpsCounter = 0L;
+  private void updateFPS() {
+    lastFps.compareAndSet(lastFps.get(), fpsCounter.get());
+    fpsCounter.compareAndSet(fpsCounter.longValue(), 0);
   }
 }
