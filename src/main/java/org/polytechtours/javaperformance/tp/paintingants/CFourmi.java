@@ -6,36 +6,88 @@ import java.awt.Color;
 import java.util.Random;
 
 public class CFourmi {
-  // Tableau des incrémentations à effectuer sur la position des fourmis
-  // en fonction de la direction du deplacement
-  static private int[][] mIncDirection = new int[8][2];
-  // le generateur aléatoire (Random est thread safe donc on la partage)
-  private static Random GenerateurAleatoire = new Random();
-  // couleur déposé par la fourmi
+
+/**
+  * Tableau des incrémentations à effectuer sur la position des fourmis
+  * en fonction de la direction du deplacement
+  */
+  private static final int[][] mIncDirection = {
+          {0, -1},
+          {1, -1},
+          {1, 0},
+          {1, 1},
+          {0, 1},
+          {-1, 1},
+          {-1, 0},
+          {-1, -1}
+  };
+  /** 
+   * le generateur aléatoire (Random est thread safe donc on la partage)
+   */ 
+  private Random GenerateurAleatoire = new Random();
+  /**
+   * couleur déposé par la fourmi
+   */
   private Color mCouleurDeposee;
+  /**
+   * Luminance Couleur Suivie par la fourmi
+   */
   private float mLuminanceCouleurSuivie;
-  // objet graphique sur lequel les fourmis peuvent peindre
+  /**
+   * objet graphique sur lequel les fourmis peuvent peindre
+   */
   private CPainting mPainting;
-  // Coordonées de la fourmi
+  /**
+   * Coordonées de la fourmi
+   */
   private int x, y;
-  // Proba d'aller a gauche, en face, a droite, de suivre la couleur
+  /**
+   * Proba d'aller a gauche, en face, a droite, de suivre la couleur
+   */
   private float[] mProba = new float[4];
-  // Numéro de la direction dans laquelle la fourmi regarde
+  /**
+   * Numéro de la direction dans laquelle la fourmi regarde
+   */
   private int mDirection;
-  // Taille de la trace de phéromones déposée par la fourmi
+  /**
+   * Taille de la trace de phéromones déposée par la fourmi
+   */
   private int mTaille;
-  // Pas d'incrémentation des directions suivant le nombre de directions
-  // allouées à la fourmies
+  /**
+   * Pas d'incrémentation des directions suivant le nombre de directions
+   * allouées à la fourmies
+   */
   private int mDecalDir;
-  // l'applet
+  /**
+   * l'applet
+   */
   private PaintingAnts mApplis;
-  // seuil de luminance pour la détection de la couleur recherchée
+  /**
+   * seuil de luminance pour la détection de la couleur recherchée
+   */
   private float mSeuilLuminance;
-  // nombre de déplacements de la fourmi
+  /**
+   * nombre de déplacements de la fourmi
+   */
   private long mNbDeplacements;
 
-  /*************************************************************************************************
-  */
+  /**
+   * Constructeur 
+   * @param pCouleurDeposee
+   * @param pCouleurSuivie
+   * @param pProbaTD
+   * @param pProbaG
+   * @param pProbaD
+   * @param pProbaSuivre
+   * @param pPainting
+   * @param pTypeDeplacement
+   * @param pInit_x
+   * @param pInit_y
+   * @param pInitDirection
+   * @param pTaille
+   * @param pSeuilLuminance
+   * @param pApplis
+   */
   public CFourmi(Color pCouleurDeposee, Color pCouleurSuivie, float pProbaTD, float pProbaG, float pProbaD,
       float pProbaSuivre, CPainting pPainting, char pTypeDeplacement, float pInit_x, float pInit_y, int pInitDirection,
       int pTaille, float pSeuilLuminance, PaintingAnts pApplis) {
@@ -66,33 +118,14 @@ public class CFourmi {
       mDecalDir = 1;
     }
 
-    // initialisation du tableau des directions
-    CFourmi.mIncDirection[0][0] = 0;
-    CFourmi.mIncDirection[0][1] = -1;
-    CFourmi.mIncDirection[1][0] = 1;
-    CFourmi.mIncDirection[1][1] = -1;
-    CFourmi.mIncDirection[2][0] = 1;
-    CFourmi.mIncDirection[2][1] = 0;
-    CFourmi.mIncDirection[3][0] = 1;
-    CFourmi.mIncDirection[3][1] = 1;
-    CFourmi.mIncDirection[4][0] = 0;
-    CFourmi.mIncDirection[4][1] = 1;
-    CFourmi.mIncDirection[5][0] = -1;
-    CFourmi.mIncDirection[5][1] = 1;
-    CFourmi.mIncDirection[6][0] = -1;
-    CFourmi.mIncDirection[6][1] = 0;
-    CFourmi.mIncDirection[7][0] = -1;
-    CFourmi.mIncDirection[7][1] = -1;
-
     mSeuilLuminance = pSeuilLuminance;
     mNbDeplacements = 0;
   }
 
-  /*************************************************************************************************
-   * Titre : void deplacer() Description : Fonction de deplacement de la fourmi
-   *
+  /**
+   * Fonction de deplacement de la fourmi
    */
-  public synchronized void deplacer() {
+  public void deplacer() {
     float tirage, prob1, prob2, prob3, total;
     int[] dir = new int[3];
     int i, j;
@@ -184,42 +217,44 @@ public class CFourmi {
     mApplis.IncrementFpsCounter();
   }
 
-  /*************************************************************************************************
-  */
-  public long getNbDeplacements() {
+/**
+  * Retourne le nombre de déplacements de la fourmi
+  * @return Le nombre de déplacement de la fourmi
+  */ 
+  final public long getNbDeplacements() {
     return mNbDeplacements;
   }
-  /****************************************************************************/
-
-  /*************************************************************************************************
+ /**
+  * Retourne la coordonnée en X de la fourmi
+  * @return la coordonnée en X de la fourmi
   */
-  public int getX() {
+  final public int getX() {
     return x;
   }
 
-  /*************************************************************************************************
+  /**
+  * Retourne la coordonnée en Y de la fourmi
+  * @return la coordonnée en Y de la fourmi
   */
-  public int getY() {
+  final public int getY() {
     return y;
   }
 
-  /*************************************************************************************************
-   * Titre : modulo Description : Fcontion de modulo permettant au fourmi de
+  /**
+   * Fcontion de modulo permettant au fourmi de
    * reapparaitre de l autre coté du Canvas lorsque qu'elle sorte de ce dernier
-   *
-   * @param x
-   *          valeur
-   *
+   * @param x valeur
+   * @param m
    * @return int
    */
   private int modulo(int x, int m) {
     return (x + m) % m;
   }
 
-  /*************************************************************************************************
-   * Titre : boolean testCouleur() Description : fonction testant l'égalité
-   * d'une couleur avec la couleur suivie
-   *
+  /**
+   * fonction testant l'égalité d'une couleur avec la couleur suivie
+   * @param pCouleur
+   * @return boolean le résultat de test
    */
   private boolean testCouleur(Color pCouleur) {
     boolean lReponse = false;

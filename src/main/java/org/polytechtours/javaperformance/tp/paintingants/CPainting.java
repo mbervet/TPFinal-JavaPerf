@@ -33,32 +33,57 @@ import java.awt.event.MouseListener;
 
 public class CPainting extends Canvas implements MouseListener {
   private static final long serialVersionUID = 1L;
-  // matrice servant pour le produit de convolution
+  /**
+   * matrice servant pour le produit de convolution
+   */
   static private float[][] mMatriceConv9 = new float[3][3];
   static private float[][] mMatriceConv25 = new float[5][5];
   static private float[][] mMatriceConv49 = new float[7][7];
-  // Objet de type Graphics permettant de manipuler l'affichage du Canvas
+
+  /**
+   * Objet de type Graphics permettant de manipuler l'affichage du Canvas
+   */
   private Graphics mGraphics;
-  // Objet ne servant que pour les bloc synchronized pour la manipulation du
-  // tableau des couleurs
+
+  /**
+   * Objet ne servant que pour les bloc synchronized pour la manipulation du
+   * tableau des couleurs
+   */
   private Object mMutexCouleurs = new Object();
-  // tableau des couleurs, il permert de conserver en memoire l'état de chaque
-  // pixel du canvas, ce qui est necessaire au deplacemet des fourmi
-  // il sert aussi pour la fonction paint du Canvas
+  
+  /**
+   * tableau des couleurs, il permert de conserver en memoire l'état de chaque
+   * pixel du canvas, ce qui est necessaire au deplacemet des fourmi
+   * il sert aussi pour la fonction paint du Canvas
+   */
   private Color[][] mCouleurs;
-  // couleur du fond
+  
+  /**
+   * couleur du fond
+   */
   private Color mCouleurFond = new Color(255, 255, 255);
-  // dimensions
+  
+  /**
+   * dimensions
+   */
   private Dimension mDimension = new Dimension();
-
+  
+  /**
+   * 
+   */
   private PaintingAnts mApplis;
-
+  
+  /**
+   * 
+   */
   private boolean mSuspendu = false;
 
-  /******************************************************************************
-   * Titre : public CPainting() Description : Constructeur de la classe
-   ******************************************************************************/
-  public CPainting(Dimension pDimension, PaintingAnts pApplis) {
+  /**
+   * Constructeur de la classe
+   * @param pDimension
+   * @param pApplis
+   */
+   public CPainting(Dimension pDimension, PaintingAnts pApplis) {
     int i, j;
     addMouseListener(this);
 
@@ -81,45 +106,47 @@ public class CPainting extends Canvas implements MouseListener {
 
   }
 
-  /******************************************************************************
-   * Titre : Color getCouleur Description : Cette fonction renvoie la couleur
-   * d'une case
-   ******************************************************************************/
-  public Color getCouleur(int x, int y) {
+  /**
+   * Cette fonction renvoie la couleur d'une case
+   * @param x
+   * @param y
+   * @return
+   */
+   final public Color getCouleur(int x, int y) {
     synchronized (mMutexCouleurs) {
       return mCouleurs[x][y];
     }
   }
 
-  /******************************************************************************
-   * Titre : Color getDimension Description : Cette fonction renvoie la
-   * dimension de la peinture
-   ******************************************************************************/
-  public Dimension getDimension() {
+  /**
+   * Cette fonction renvoie la dimension de la peinture
+   * @return la dimension
+   */
+   final public Dimension getDimension() {
     return mDimension;
   }
 
-  /******************************************************************************
-   * Titre : Color getHauteur Description : Cette fonction renvoie la hauteur de
-   * la peinture
-   ******************************************************************************/
-  public int getHauteur() {
+  /**
+   * Cette fonction renvoie la hauteur de la peinture
+   * @return la hauteur
+   */
+   final public int getHauteur() {
     return mDimension.height;
   }
 
-  /******************************************************************************
-   * Titre : Color getLargeur Description : Cette fonction renvoie la hauteur de
-   * la peinture
-   ******************************************************************************/
-  public int getLargeur() {
+  /**
+   * Cette fonction renvoie la hauteur de la peinture
+   * @return la hauteur
+   */
+   final public int getLargeur() {
     return mDimension.width;
   }
 
-  /******************************************************************************
-   * Titre : void init() Description : Initialise le fond a la couleur blanche
+  /**
+   * Initialise le fond a la couleur blanche
    * et initialise le tableau des couleurs avec la couleur blanche
-   ******************************************************************************/
-  public void init() {
+   */
+   public void init() {
     int i, j;
     mGraphics = getGraphics();
     synchronized (mMutexCouleurs) {
@@ -245,7 +272,9 @@ public class CPainting extends Canvas implements MouseListener {
     mSuspendu = false;
   }
 
-  /****************************************************************************/
+  /**
+   * Action quand on clique sur la peinture
+   */
   public void mouseClicked(MouseEvent pMouseEvent) {
     pMouseEvent.consume();
     if (pMouseEvent.getButton() == MouseEvent.BUTTON1) {
@@ -285,11 +314,13 @@ public class CPainting extends Canvas implements MouseListener {
   public void mouseReleased(MouseEvent pMouseEvent) {
   }
 
-  /******************************************************************************
-   * Titre : void paint(Graphics g) Description : Surcharge de la fonction qui
+
+  /**
+   * Surcharge de la fonction qui
    * est appelé lorsque le composant doit être redessiné
-   ******************************************************************************/
-  @Override
+   * @param pGraphics
+   */
+   @Override
   public void paint(Graphics pGraphics) {
     int i, j;
 
@@ -415,10 +446,9 @@ public class CPainting extends Canvas implements MouseListener {
     }
   }
 
-  /******************************************************************************
-   * Titre : setSupendu Description : Cette fonction change l'état de suspension
-   ******************************************************************************/
-
+/**
+ * Cette fonction change l'état de suspension
+ */
   public void suspendre() {
     mSuspendu = !mSuspendu;
     if (!mSuspendu) {

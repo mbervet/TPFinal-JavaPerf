@@ -15,36 +15,62 @@ import javax.swing.Timer;
 
 public class PaintingAnts extends java.applet.Applet implements Runnable {
   private static final long serialVersionUID = 1L;
-  // parametres
+
+  /**
+   * parametres largeur
+   */
   private int mLargeur;
+
+  /**
+   * parametres hauteur
+   */
   private int mHauteur;
 
-  // l'objet graphique lui meme
+  /**
+   * l'objet graphique lui meme
+   */
   private CPainting mPainting;
 
-  // les fourmis
+  /**
+  * Colony vector
+  */
   private Vector<CFourmi> mColonie = new Vector<CFourmi>();
+ 
+  /**
+  * Colony containing the ants
+  */  
   private CColonie mColony;
-
   private Thread mApplis, mThreadColony;
 
+  /**
+   * Dimensions
+   */
   private Dimension mDimension;
   private long mCompteur = 0;
   private Object mMutexCompteur = new Object();
+  
+  /**
+   * le status de thread
+   */
   private boolean mPause = false;
 
+  /**
+   * Base image
+   */
   public BufferedImage mBaseImage;
   private Timer fpsTimer;
 
-  /** Fourmis per second :) */
+  /** 
+   * Fourmis per second 
+  */
   private Long fpsCounter = 0L;
-  /** stocke la valeur du compteur lors du dernier timer */
+  /** 
+   * stocke la valeur du compteur lors du dernier timer 
+   */
   private Long lastFps = 0L;
 
-  /****************************************************************************/
   /**
    * incrementer le compteur
-   *
    */
   public void compteur() {
     synchronized (mMutexCompteur) {
@@ -52,10 +78,9 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     }
   }
 
-  /****************************************************************************/
+ 
   /**
    * Detruire l'applet
-   *
    */
   @Override
   public void destroy() {
@@ -66,7 +91,6 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     }
   }
 
-  /****************************************************************************/
   /**
    * Obtenir l'information Applet
    *
@@ -76,7 +100,6 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     return "Painting Ants";
   }
 
-  /****************************************************************************/
   /**
    * Obtenir l'information Applet
    *
@@ -90,12 +113,11 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     return lInfo;
   }
 
-  /****************************************************************************/
   /**
    * Obtenir l'etat de pause
    *
    */
-  public boolean getPause() {
+  final public boolean getPause() {
     return mPause;
   }
 
@@ -103,7 +125,6 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     fpsCounter++;
   }
 
-  /****************************************************************************/
   /**
    * Initialisation de l'applet
    *
@@ -143,7 +164,6 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     setLayout(null);
   }
 
-  /****************************************************************************/
   /**
    * Paint the image and all active highlights.
    */
@@ -177,10 +197,14 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
   }
 
   // =========================================================================
-  // cette fonction analyse une chaine :
-  // si pStr est un nombre : sa valeur est retournee
-  // si pStr est un interval x..y : une valeur au hasard dans [x,y] est
-  // retournée
+  
+  /**
+   *  cette fonction analyse une chaine :
+   * si pStr est un nombre : sa valeur est retournee
+   * si pStr est un interval x..y : une valeur au hasard dans [x,y] est retournée
+   * @param pStr
+   * @return
+   */
   private float readFloatParameter(String pStr) {
     float lMin, lMax, lResult;
     // System.out.println(" chaine pStr: "+pStr);
@@ -205,10 +229,13 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
   }
 
   // =========================================================================
-  // cette fonction analyse une chaine :
-  // si pStr est un nombre : sa valeur est retournée
-  // si pStr est un interval x..y : une valeur au hasard dans [x,y] est
-  // retournee
+  /**
+   * cette fonction analyse une chaine :
+   * si pStr est un nombre : sa valeur est retournée
+   * si pStr est un interval x..y : une valeur au hasard dans [x,y] est retournee
+   * @param pStr
+   * @return
+   */
   private int readIntParameter(String pStr) {
     int lMin, lMax, lResult;
     StringTokenizer lStrTok = new StringTokenizer(pStr, ":");
@@ -229,8 +256,10 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     return lResult;
   }
 
-  // =========================================================================
-  // lecture des parametres de l'applet
+ 
+  /**
+   * lecture des parametres de l'applet
+   */
   private void readParameterFourmis() {
     String lChaine;
     int R, G, B;
@@ -443,10 +472,9 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     // System.out.println("Nombre de Fourmis:"+lNbFourmis);
   }
 
-  /*************************************************************************************************
-   * Titre : boolean testCouleur() Description : fonction testant l'egalite de
-   * deux couleurs
-   *
+
+  /**
+   * fonction testant l'egalite de deux couleurs
    */
   @Override
   public void run() {
@@ -492,10 +520,8 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     }
   }
 
-  /****************************************************************************/
-  /**
+/**
    * Lancer l'applet
-   *
    */
   @Override
   public void start() {
@@ -524,7 +550,6 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
   /****************************************************************************/
   /**
    * Arreter l'applet
-   *
    */
   @Override
   public void stop() {
