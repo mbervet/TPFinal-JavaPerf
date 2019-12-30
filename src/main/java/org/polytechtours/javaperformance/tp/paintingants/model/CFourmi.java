@@ -8,36 +8,116 @@ import java.util.Random;
 import org.polytechtours.javaperformance.tp.paintingants.control.PaintingAnts;
 
 public class CFourmi {
+<<<<<<< HEAD:src/main/java/org/polytechtours/javaperformance/tp/paintingants/model/CFourmi.java
   // Tableau des incrementations a effectuer sur la position des fourmis
   // en fonction de la direction du deplacement
   static private int[][] mIncDirection = new int[8][2];
   // le generateur aleatoire (Random est thread safe donc on la partage)
   private static Random GenerateurAleatoire = new Random();
   // couleur depose par la fourmi
+=======
+
+/**
+  * Tableau des incrémentations à effectuer sur la position des fourmis
+  * en fonction de la direction du deplacement
+  */
+  private static final int[][] mIncDirection = {
+          {0, -1},
+          {1, -1},
+          {1, 0},
+          {1, 1},
+          {0, 1},
+          {-1, 1},
+          {-1, 0},
+          {-1, -1}
+  };
+  /** 
+   * le generateur aléatoire (Random est thread safe donc on la partage)
+   */ 
+  private Random GenerateurAleatoire = new Random();
+  /**
+   * couleur déposé par la fourmi
+   */
+>>>>>>> V2-AjoutLog:src/main/java/org/polytechtours/javaperformance/tp/paintingants/CFourmi.java
   private Color mCouleurDeposee;
+  /**
+   * Luminance Couleur Suivie par la fourmi
+   */
   private float mLuminanceCouleurSuivie;
-  // objet graphique sur lequel les fourmis peuvent peindre
+  /**
+   * objet graphique sur lequel les fourmis peuvent peindre
+   */
   private CPainting mPainting;
+<<<<<<< HEAD:src/main/java/org/polytechtours/javaperformance/tp/paintingants/model/CFourmi.java
   // Coordonnees de la fourmi
+=======
+  /**
+   * Coordonées de la fourmi
+   */
+>>>>>>> V2-AjoutLog:src/main/java/org/polytechtours/javaperformance/tp/paintingants/CFourmi.java
   private int x, y;
-  // Proba d'aller a gauche, en face, a droite, de suivre la couleur
+  /**
+   * Proba d'aller a gauche, en face, a droite, de suivre la couleur
+   */
   private float[] mProba = new float[4];
+<<<<<<< HEAD:src/main/java/org/polytechtours/javaperformance/tp/paintingants/model/CFourmi.java
   // Numero de la direction dans laquelle la fourmi regarde
   private int mDirection;
   // Taille de la trace de pheromones deposee par la fourmi
   private int mTaille;
   // Pas d'incrementation des directions suivant le nombre de directions
   // allouees a la fourmies
+=======
+  /**
+   * Numéro de la direction dans laquelle la fourmi regarde
+   */
+  private int mDirection;
+  /**
+   * Taille de la trace de phéromones déposée par la fourmi
+   */
+  private int mTaille;
+  /**
+   * Pas d'incrémentation des directions suivant le nombre de directions
+   * allouées à la fourmies
+   */
+>>>>>>> V2-AjoutLog:src/main/java/org/polytechtours/javaperformance/tp/paintingants/CFourmi.java
   private int mDecalDir;
-  // l'applet
+  /**
+   * l'applet
+   */
   private PaintingAnts mApplis;
+<<<<<<< HEAD:src/main/java/org/polytechtours/javaperformance/tp/paintingants/model/CFourmi.java
   // seuil de luminance pour la detection de la couleur recherchee
   private float mSeuilLuminance;
   // nombre de deplacements de la fourmi
+=======
+  /**
+   * seuil de luminance pour la détection de la couleur recherchée
+   */
+  private float mSeuilLuminance;
+  /**
+   * nombre de déplacements de la fourmi
+   */
+>>>>>>> V2-AjoutLog:src/main/java/org/polytechtours/javaperformance/tp/paintingants/CFourmi.java
   private long mNbDeplacements;
 
-  /*************************************************************************************************
-  */
+  /**
+   * Constructeur 
+   * @param pCouleurDeposee
+   * @param pCouleurSuivie
+   * @param pProbaTD
+   * @param pProbaG
+   * @param pProbaD
+   * @param pProbaSuivre
+   * @param pPainting
+   * @param pTypeDeplacement
+   * @param pInit_x
+   * @param pInit_y
+   * @param pInitDirection
+   * @param pTaille
+   * @param pSeuilLuminance
+   * @param pApplis
+   */
   public CFourmi(Color pCouleurDeposee, Color pCouleurSuivie, float pProbaTD, float pProbaG, float pProbaD,
       float pProbaSuivre, char pTypeDeplacement, float pInit_x, float pInit_y, int pInitDirection,
       int pTaille, float pSeuilLuminance, PaintingAnts pApplis) {
@@ -68,33 +148,14 @@ public class CFourmi {
       mDecalDir = 1;
     }
 
-    // initialisation du tableau des directions
-    CFourmi.mIncDirection[0][0] = 0;
-    CFourmi.mIncDirection[0][1] = -1;
-    CFourmi.mIncDirection[1][0] = 1;
-    CFourmi.mIncDirection[1][1] = -1;
-    CFourmi.mIncDirection[2][0] = 1;
-    CFourmi.mIncDirection[2][1] = 0;
-    CFourmi.mIncDirection[3][0] = 1;
-    CFourmi.mIncDirection[3][1] = 1;
-    CFourmi.mIncDirection[4][0] = 0;
-    CFourmi.mIncDirection[4][1] = 1;
-    CFourmi.mIncDirection[5][0] = -1;
-    CFourmi.mIncDirection[5][1] = 1;
-    CFourmi.mIncDirection[6][0] = -1;
-    CFourmi.mIncDirection[6][1] = 0;
-    CFourmi.mIncDirection[7][0] = -1;
-    CFourmi.mIncDirection[7][1] = -1;
-
     mSeuilLuminance = pSeuilLuminance;
     mNbDeplacements = 0;
   }
 
-  /*************************************************************************************************
-   * Titre : void deplacer() Description : Fonction de deplacement de la fourmi
-   *
+  /**
+   * Fonction de deplacement de la fourmi
    */
-  public synchronized void deplacer() {
+  public void deplacer() {
     float tirage, prob1, prob2, prob3, total;
     int[] dir = new int[3];
     int i, j;
@@ -186,42 +247,44 @@ public class CFourmi {
     mApplis.IncrementFpsCounter();
   }
 
-  /*************************************************************************************************
-  */
-  public long getNbDeplacements() {
+/**
+  * Retourne le nombre de déplacements de la fourmi
+  * @return Le nombre de déplacement de la fourmi
+  */ 
+  final public long getNbDeplacements() {
     return mNbDeplacements;
   }
-  /****************************************************************************/
-
-  /*************************************************************************************************
+ /**
+  * Retourne la coordonnée en X de la fourmi
+  * @return la coordonnée en X de la fourmi
   */
-  public int getX() {
+  final public int getX() {
     return x;
   }
 
-  /*************************************************************************************************
+  /**
+  * Retourne la coordonnée en Y de la fourmi
+  * @return la coordonnée en Y de la fourmi
   */
-  public int getY() {
+  final public int getY() {
     return y;
   }
 
-  /*************************************************************************************************
-   * Titre : modulo Description : Fcontion de modulo permettant au fourmi de
+  /**
+   * Fcontion de modulo permettant au fourmi de
    * reapparaitre de l autre coté du Canvas lorsque qu'elle sorte de ce dernier
-   *
-   * @param x
-   *          valeur
-   *
+   * @param x valeur
+   * @param m
    * @return int
    */
   private int modulo(int x, int m) {
     return (x + m) % m;
   }
 
-  /*************************************************************************************************
-   * Titre : boolean testCouleur() Description : fonction testant l'égalité
-   * d'une couleur avec la couleur suivie
-   *
+  /**
+   * fonction testant l'égalité d'une couleur avec la couleur suivie
+   * @param pCouleur
+   * @return boolean le résultat de test
    */
   private boolean testCouleur(Color pCouleur) {
     boolean lReponse = false;
