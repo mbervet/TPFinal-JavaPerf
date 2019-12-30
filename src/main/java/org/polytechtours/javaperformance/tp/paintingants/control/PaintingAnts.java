@@ -44,8 +44,7 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
    * Dimensions
    */
   private Dimension mDimension;
-  private long mCompteur = 0;
-  private Object mMutexCompteur = new Object();
+  private AtomicLong mCompteur = new AtomicLong(0);
   
   /**
    * le status de thread
@@ -67,9 +66,7 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
    * incrementer le compteur
    */
   public void compteur() {
-    synchronized (mMutexCompteur) {
-      mCompteur++;
-    }
+      mCompteur.incrementAndGet();
   }
 
  
@@ -204,7 +201,7 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     // System.out.println(this.getName()+ ":run()");
 
     int i;
-    String lMessage;
+    StringBuffer lMessage = new StringBuffer("");
 
     mPainting.init();
 
@@ -218,28 +215,25 @@ public class PaintingAnts extends java.applet.Applet implements Runnable {
     mThreadColony.start();
 
     while (mApplis == currentThread) {
-      if (mPause) {
-        lMessage = "pause";
-      } else {
-        synchronized (this) {
-          lMessage = "running (" + lastFps + ") ";
+    	if (mPause) {
+    		lMessage.delete(0, lMessage.length());
+    		lMessage.append("pause");
+    	} 
+    	else {
+    		lMessage.delete(0, lMessage.length());
+    		lMessage.append("running (" + lastFps + ") ");
+
+    		for (i = 0; i < (mCompteur.get() % 10000) / 1000; i++) {
+    			lMessage.append(".");
+    		}
         }
+    	showStatus(lMessage.toString());
 
-        synchronized (mMutexCompteur) {
-          mCompteur %= 10000;
-          for (i = 0; i < mCompteur / 1000; i++) {
-            lMessage += ".";
-          }
-        }
-
-      }
-      showStatus(lMessage);
-
-      try {
-        Thread.sleep(10);
-      } catch (InterruptedException e) {
-        showStatus(e.toString());
-      }
+    	try {
+    		Thread.sleep(10);
+    	} catch (InterruptedException e) {
+    		showStatus(e.toString());
+    	}
     }
   }
 
