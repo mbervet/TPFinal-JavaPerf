@@ -8,14 +8,10 @@ import java.util.Random;
 import org.polytechtours.javaperformance.tp.paintingants.control.PaintingAnts;
 
 public class CFourmi {
-<<<<<<< HEAD:src/main/java/org/polytechtours/javaperformance/tp/paintingants/model/CFourmi.java
-  // Tableau des incrementations a effectuer sur la position des fourmis
-  // en fonction de la direction du deplacement
-  static private int[][] mIncDirection = new int[8][2];
+
   // le generateur aleatoire (Random est thread safe donc on la partage)
   private static Random GenerateurAleatoire = new Random();
-  // couleur depose par la fourmi
-=======
+
 
 /**
   * Tableau des incrémentations à effectuer sur la position des fourmis
@@ -31,14 +27,7 @@ public class CFourmi {
           {-1, 0},
           {-1, -1}
   };
-  /** 
-   * le generateur aléatoire (Random est thread safe donc on la partage)
-   */ 
-  private Random GenerateurAleatoire = new Random();
-  /**
-   * couleur déposé par la fourmi
-   */
->>>>>>> V2-AjoutLog:src/main/java/org/polytechtours/javaperformance/tp/paintingants/CFourmi.java
+
   private Color mCouleurDeposee;
   /**
    * Luminance Couleur Suivie par la fourmi
@@ -48,57 +37,35 @@ public class CFourmi {
    * objet graphique sur lequel les fourmis peuvent peindre
    */
   private CPainting mPainting;
-<<<<<<< HEAD:src/main/java/org/polytechtours/javaperformance/tp/paintingants/model/CFourmi.java
+
   // Coordonnees de la fourmi
-=======
+
   /**
    * Coordonées de la fourmi
    */
->>>>>>> V2-AjoutLog:src/main/java/org/polytechtours/javaperformance/tp/paintingants/CFourmi.java
+
   private int x, y;
   /**
    * Proba d'aller a gauche, en face, a droite, de suivre la couleur
    */
   private float[] mProba = new float[4];
-<<<<<<< HEAD:src/main/java/org/polytechtours/javaperformance/tp/paintingants/model/CFourmi.java
+
   // Numero de la direction dans laquelle la fourmi regarde
   private int mDirection;
   // Taille de la trace de pheromones deposee par la fourmi
   private int mTaille;
   // Pas d'incrementation des directions suivant le nombre de directions
   // allouees a la fourmies
-=======
-  /**
-   * Numéro de la direction dans laquelle la fourmi regarde
-   */
-  private int mDirection;
-  /**
-   * Taille de la trace de phéromones déposée par la fourmi
-   */
-  private int mTaille;
-  /**
-   * Pas d'incrémentation des directions suivant le nombre de directions
-   * allouées à la fourmies
-   */
->>>>>>> V2-AjoutLog:src/main/java/org/polytechtours/javaperformance/tp/paintingants/CFourmi.java
+
   private int mDecalDir;
   /**
    * l'applet
    */
   private PaintingAnts mApplis;
-<<<<<<< HEAD:src/main/java/org/polytechtours/javaperformance/tp/paintingants/model/CFourmi.java
+
   // seuil de luminance pour la detection de la couleur recherchee
   private float mSeuilLuminance;
   // nombre de deplacements de la fourmi
-=======
-  /**
-   * seuil de luminance pour la détection de la couleur recherchée
-   */
-  private float mSeuilLuminance;
-  /**
-   * nombre de déplacements de la fourmi
-   */
->>>>>>> V2-AjoutLog:src/main/java/org/polytechtours/javaperformance/tp/paintingants/CFourmi.java
   private long mNbDeplacements;
 
   /**
