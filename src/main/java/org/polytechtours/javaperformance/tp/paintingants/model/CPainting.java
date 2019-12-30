@@ -33,97 +33,145 @@ import org.polytechtours.javaperformance.tp.paintingants.control.PaintingAnts;
  */
 
 public class CPainting extends Canvas {
-  private static final long serialVersionUID = 1L;
-  // matrice servant pour le produit de convolution
-  static private float[][] mMatriceConv9 = new float[3][3];
-  static private float[][] mMatriceConv25 = new float[5][5];
-  static private float[][] mMatriceConv49 = new float[7][7];
-  // Objet de type Graphics permettant de manipuler l'affichage du Canvas
-  private Graphics mGraphics;
-  // Objet ne servant que pour les bloc synchronized pour la manipulation du
-  // tableau des couleurs
-  private Object mMutexCouleurs = new Object();
-  // tableau des couleurs, il permert de conserver en memoire l'etat de chaque
-  // pixel du canvas, ce qui est necessaire au deplacemet des fourmi
-  // il sert aussi pour la fonction paint du Canvas
-  private Color[][] mCouleurs;
-  // couleur du fond
-  private Color mCouleurFond = new Color(255, 255, 255);
-  // dimensions
-  private Dimension mDimension = new Dimension();
+private static final long serialVersionUID = 1L;
+    /**
+     * matrice servant pour le produit de convolution
+     */
+    /**
+    * la matrice de convolution : lissage moyen sur 9 cases 
+    */
+    private static final float[][] mMatriceConv9 = { 
+        { 1 / 16f, 2 / 16f, 1 / 16f }, 
+        { 2 / 16f, 4 / 16f, 2 / 16f },
+        { 1 / 16f, 2 / 16f, 1 / 16f } 
+    };
+    /**
+    * la matrice de convolution : lissage moyen sur 25 cases 
+    */
+    private static final float[][] mMatriceConv25 = { 
+        { 1 / 44f, 1 / 44f, 2 / 44f, 1 / 44f, 1 / 44f },
+        { 1 / 44f, 2 / 44f, 3 / 44f, 2 / 44f, 1 / 44f },
+        { 2 / 44f, 3 / 44f, 4 / 44f, 3 / 44f, 2 / 44f },
+        { 1 / 44f, 2 / 44f, 3 / 44f, 2 / 44f, 1 / 44f }, 
+        { 1 / 44f, 1 / 44f, 2 / 44f, 1 / 44f, 1 / 44f } 
+    };
+    /**
+    * la matrice de convolution : lissage moyen sur 49 cases 
+    */
+    private static final float[][] mMatriceConv49 = {
+        { 1 / 128f, 1 / 128f, 2 / 128f, 2 / 128f, 2 / 128f, 1 / 128f, 1 / 128f },
+        { 1 / 128f, 2 / 128f, 3 / 128f, 4 / 128f, 3 / 128f, 2 / 128f, 1 / 128f },
+        { 2 / 128f, 3 / 128f, 4 / 128f, 5 / 128f, 4 / 128f, 3 / 128f, 2 / 128f },
+        { 2 / 128f, 4 / 128f, 5 / 128f, 8 / 128f, 5 / 128f, 4 / 128f, 2 / 128f },
+        { 2 / 128f, 3 / 128f, 4 / 128f, 5 / 128f, 4 / 128f, 3 / 128f, 2 / 128f },
+        { 1 / 128f, 2 / 128f, 3 / 128f, 4 / 128f, 3 / 128f, 2 / 128f, 1 / 128f },
+        { 1 / 128f, 1 / 128f, 2 / 128f, 2 / 128f, 2 / 128f, 1 / 128f, 1 / 128f } 
+    };  
+    /**
+	 * Objet de type Graphics permettant de manipuler l'affichage du Canvas
+	 */
+    private Graphics mGraphics;
+    /**
+	 * Objet ne servant que pour les bloc synchronized pour la manipulation du
+	 * tableau des couleurs
+	 */
+    private Object mMutexCouleurs = new Object();
+    /**
+	 * tableau des couleurs, il permert de conserver en memoire l'état de chaque
+	 * pixel du canvas, ce qui est necessaire au deplacemet des fourmi il sert aussi
+	 * pour la fonction paint du Canvas
+	 */
+    private Color[][] mCouleurs;
+    /**
+	 * couleur du fond
+	 */
+    private Color mCouleurFond = new Color(255, 255, 255);
+    /**
+	 * dimensions
+	 */
+    private Dimension mDimension = new Dimension();
 
-  private PaintingAnts mApplis;
+    private PaintingAnts mApplis;
 
-  private boolean mSuspendu = false;
+    private boolean mSuspendu = false;
   
-  private final MouseEventManager MouseManager = new MouseEventManager(this);
+    private final MouseEventManager MouseManager = new MouseEventManager(this);
 
-  /******************************************************************************
-   * Titre : public CPainting() Description : Constructeur de la classe
-   ******************************************************************************/
-  public CPainting(Dimension pDimension, PaintingAnts pApplis) {
-    int i, j;
+  /**
+	 * Constructeur de la classe
+	 * 
+	 * @param pDimension
+	 * @param pApplis
+	 */ 
+   public CPainting(Dimension pDimension, PaintingAnts pApplis) {
+        int i, j;
     
-    addMouseListener(MouseManager);
+        addMouseListener(MouseManager);
 
-    mApplis = pApplis;
+        mApplis = pApplis;
 
-    mDimension = pDimension;
-    setBounds(new Rectangle(0, 0, mDimension.width, mDimension.height));
+        mDimension = pDimension;
+        setBounds(new Rectangle(0, 0, mDimension.width, mDimension.height));
 
-    this.setBackground(mCouleurFond);
+        this.setBackground(mCouleurFond);
 
-    // initialisation de la matrice des couleurs
-    mCouleurs = new Color[mDimension.width][mDimension.height];
-    synchronized (mMutexCouleurs) {
-      for (i = 0; i != mDimension.width; i++) {
-        for (j = 0; j != mDimension.height; j++) {
-          mCouleurs[i][j] = new Color(mCouleurFond.getRed(), mCouleurFond.getGreen(), mCouleurFond.getBlue());
+         // initialisation de la matrice des couleurs
+         mCouleurs = new Color[mDimension.width][mDimension.height];
+        synchronized (mMutexCouleurs) {
+             for (i = 0; i != mDimension.width; i++) {
+                 for (j = 0; j != mDimension.height; j++) {
+                    mCouleurs[i][j] = new Color(mCouleurFond.getRed(), mCouleurFond.getGreen(), mCouleurFond.getBlue());
+                }
+            }
         }
-      }
-    }
 
   }
 
-  /******************************************************************************
-   * Titre : Color getCouleur Description : Cette fonction renvoie la couleur
-   * d'une case
-   ******************************************************************************/
+  /**
+	 * Cette fonction renvoie la couleur d'une case
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
   public Color getCouleur(int x, int y) {
     synchronized (mMutexCouleurs) {
       return mCouleurs[x][y];
     }
   }
 
-  /******************************************************************************
-   * Titre : Color getDimension Description : Cette fonction renvoie la
-   * dimension de la peinture
-   ******************************************************************************/
-  public Dimension getDimension() {
-    return mDimension;
+  /**
+	 * Cette fonction renvoie la dimension de la peinture
+	 * 
+	 * @return la dimension
+	 */
+    public Dimension getDimension() {
+        return mDimension;
   }
 
-  /******************************************************************************
-   * Titre : Color getHauteur Description : Cette fonction renvoie la hauteur de
-   * la peinture
-   ******************************************************************************/
-  public int getHauteur() {
-    return mDimension.height;
+  /**
+	 * Cette fonction renvoie la hauteur de la peinture
+	 * 
+	 * @return la hauteur
+	 */ 
+   public int getHauteur() {
+        return mDimension.height;
   }
 
-  /******************************************************************************
-   * Titre : Color getLargeur Description : Cette fonction renvoie la largeur de
-   * la peinture
-   ******************************************************************************/
-  public int getLargeur() {
-    return mDimension.width;
+   /**
+	 * Cette fonction renvoie la hauteur de la peinture
+	 * 
+	 * @return la hauteur
+	 */
+   public int getLargeur() {
+        return mDimension.width;
   }
 
-  /******************************************************************************
-   * Titre : void init() Description : Initialise le fond a la couleur blanche
-   * et initialise le tableau des couleurs avec la couleur blanche
-   ******************************************************************************/
-  public void init() {
+  /**
+	 * Initialise le fond a la couleur blanche et initialise le tableau des couleurs
+	 * avec la couleur blanche
+	 */
+   public void init() {
     int i, j;
     mGraphics = getGraphics();
     synchronized (mMutexCouleurs) {
@@ -138,114 +186,6 @@ public class CPainting extends Canvas {
       }
     }
 
-    // initialisation de la matrice de convolution : lissage moyen sur 9
-    // cases
-    /*
-     * 1 2 1 2 4 2 1 2 1
-     */
-    CPainting.mMatriceConv9[0][0] = 1 / 16f;
-    CPainting.mMatriceConv9[0][1] = 2 / 16f;
-    CPainting.mMatriceConv9[0][2] = 1 / 16f;
-    CPainting.mMatriceConv9[1][0] = 2 / 16f;
-    CPainting.mMatriceConv9[1][1] = 4 / 16f;
-    CPainting.mMatriceConv9[1][2] = 2 / 16f;
-    CPainting.mMatriceConv9[2][0] = 1 / 16f;
-    CPainting.mMatriceConv9[2][1] = 2 / 16f;
-    CPainting.mMatriceConv9[2][2] = 1 / 16f;
-
-    // initialisation de la matrice de convolution : lissage moyen sur 25
-    // cases
-    /*
-     * 1 1 2 1 1 1 2 3 2 1 2 3 4 3 2 1 2 3 2 1 1 1 2 1 1
-     */
-    CPainting.mMatriceConv25[0][0] = 1 / 44f;
-    CPainting.mMatriceConv25[0][1] = 1 / 44f;
-    CPainting.mMatriceConv25[0][2] = 2 / 44f;
-    CPainting.mMatriceConv25[0][3] = 1 / 44f;
-    CPainting.mMatriceConv25[0][4] = 1 / 44f;
-    CPainting.mMatriceConv25[1][0] = 1 / 44f;
-    CPainting.mMatriceConv25[1][1] = 2 / 44f;
-    CPainting.mMatriceConv25[1][2] = 3 / 44f;
-    CPainting.mMatriceConv25[1][3] = 2 / 44f;
-    CPainting.mMatriceConv25[1][4] = 1 / 44f;
-    CPainting.mMatriceConv25[2][0] = 2 / 44f;
-    CPainting.mMatriceConv25[2][1] = 3 / 44f;
-    CPainting.mMatriceConv25[2][2] = 4 / 44f;
-    CPainting.mMatriceConv25[2][3] = 3 / 44f;
-    CPainting.mMatriceConv25[2][4] = 2 / 44f;
-    CPainting.mMatriceConv25[3][0] = 1 / 44f;
-    CPainting.mMatriceConv25[3][1] = 2 / 44f;
-    CPainting.mMatriceConv25[3][2] = 3 / 44f;
-    CPainting.mMatriceConv25[3][3] = 2 / 44f;
-    CPainting.mMatriceConv25[3][4] = 1 / 44f;
-    CPainting.mMatriceConv25[4][0] = 1 / 44f;
-    CPainting.mMatriceConv25[4][1] = 1 / 44f;
-    CPainting.mMatriceConv25[4][2] = 2 / 44f;
-    CPainting.mMatriceConv25[4][3] = 1 / 44f;
-    CPainting.mMatriceConv25[4][4] = 1 / 44f;
-
-    // initialisation de la matrice de convolution : lissage moyen sur 49
-    // cases
-    /*
-     * 1 1 2 2 2 1 1 1 2 3 4 3 2 1 2 3 4 5 4 3 2 2 4 5 8 5 4 2 2 3 4 5 4 3 2 1 2
-     * 3 4 3 2 1 1 1 2 2 2 1 1
-     */
-    CPainting.mMatriceConv49[0][0] = 1 / 128f;
-    CPainting.mMatriceConv49[0][1] = 1 / 128f;
-    CPainting.mMatriceConv49[0][2] = 2 / 128f;
-    CPainting.mMatriceConv49[0][3] = 2 / 128f;
-    CPainting.mMatriceConv49[0][4] = 2 / 128f;
-    CPainting.mMatriceConv49[0][5] = 1 / 128f;
-    CPainting.mMatriceConv49[0][6] = 1 / 128f;
-
-    CPainting.mMatriceConv49[1][0] = 1 / 128f;
-    CPainting.mMatriceConv49[1][1] = 2 / 128f;
-    CPainting.mMatriceConv49[1][2] = 3 / 128f;
-    CPainting.mMatriceConv49[1][3] = 4 / 128f;
-    CPainting.mMatriceConv49[1][4] = 3 / 128f;
-    CPainting.mMatriceConv49[1][5] = 2 / 128f;
-    CPainting.mMatriceConv49[1][6] = 1 / 128f;
-
-    CPainting.mMatriceConv49[2][0] = 2 / 128f;
-    CPainting.mMatriceConv49[2][1] = 3 / 128f;
-    CPainting.mMatriceConv49[2][2] = 4 / 128f;
-    CPainting.mMatriceConv49[2][3] = 5 / 128f;
-    CPainting.mMatriceConv49[2][4] = 4 / 128f;
-    CPainting.mMatriceConv49[2][5] = 3 / 128f;
-    CPainting.mMatriceConv49[2][6] = 2 / 128f;
-
-    CPainting.mMatriceConv49[3][0] = 2 / 128f;
-    CPainting.mMatriceConv49[3][1] = 4 / 128f;
-    CPainting.mMatriceConv49[3][2] = 5 / 128f;
-    CPainting.mMatriceConv49[3][3] = 8 / 128f;
-    CPainting.mMatriceConv49[3][4] = 5 / 128f;
-    CPainting.mMatriceConv49[3][5] = 4 / 128f;
-    CPainting.mMatriceConv49[3][6] = 2 / 128f;
-
-    CPainting.mMatriceConv49[4][0] = 2 / 128f;
-    CPainting.mMatriceConv49[4][1] = 3 / 128f;
-    CPainting.mMatriceConv49[4][2] = 4 / 128f;
-    CPainting.mMatriceConv49[4][3] = 5 / 128f;
-    CPainting.mMatriceConv49[4][4] = 4 / 128f;
-    CPainting.mMatriceConv49[4][5] = 3 / 128f;
-    CPainting.mMatriceConv49[4][6] = 2 / 128f;
-
-    CPainting.mMatriceConv49[5][0] = 1 / 128f;
-    CPainting.mMatriceConv49[5][1] = 2 / 128f;
-    CPainting.mMatriceConv49[5][2] = 3 / 128f;
-    CPainting.mMatriceConv49[5][3] = 4 / 128f;
-    CPainting.mMatriceConv49[5][4] = 3 / 128f;
-    CPainting.mMatriceConv49[5][5] = 2 / 128f;
-    CPainting.mMatriceConv49[5][6] = 1 / 128f;
-
-    CPainting.mMatriceConv49[6][0] = 1 / 128f;
-    CPainting.mMatriceConv49[6][1] = 1 / 128f;
-    CPainting.mMatriceConv49[6][2] = 2 / 128f;
-    CPainting.mMatriceConv49[6][3] = 2 / 128f;
-    CPainting.mMatriceConv49[6][4] = 2 / 128f;
-    CPainting.mMatriceConv49[6][5] = 1 / 128f;
-    CPainting.mMatriceConv49[6][6] = 1 / 128f;
-
     mSuspendu = false;
   }
   
@@ -253,10 +193,12 @@ public class CPainting extends Canvas {
 	  mApplis.pause();
   }
 
-  /******************************************************************************
-   * Titre : void paint(Graphics g) Description : Surcharge de la fonction qui
-   * est appele lorsque le composant doit être redessine
-   ******************************************************************************/
+  /**
+	 * Surcharge de la fonction qui est appelé lorsque le composant doit être
+	 * redessiné
+	 * 
+	 * @param pGraphics
+	 */
   @Override
   public void paint(Graphics pGraphics) {
     int i, j;
@@ -271,11 +213,17 @@ public class CPainting extends Canvas {
     }
   }
 
-  /******************************************************************************
-   * Titre : void colorer_case(int x, int y, Color c) Description : Cette
-   * fonction va colorer le pixel correspondant et mettre a jour le tabmleau des
-   * couleurs
-   ******************************************************************************/
+  /**
+	 * Cette fonction va colorer le pixel correspondant 
+	 * et mettre a jour le tabmleau des couleurs
+	 * {@value #mMatriceConv9}
+	 * {@value #mMatriceConv25}
+	 * {@value #mMatriceConv49}
+	 * @param x coordonnées de l'axe des x
+	 * @param y coordonnées de l'axe des y
+	 * @param c Color d'un pixel
+	 * @param pTaille
+	 */
   public void setCouleur(int x, int y, Color c, int pTaille) {
     int i, j, k, l, m, n;
     float R, G, B;
@@ -383,10 +331,9 @@ public class CPainting extends Canvas {
     }
   }
 
-  /******************************************************************************
-   * Titre : setSupendu Description : Cette fonction change l'etat de suspension
-   ******************************************************************************/
-
+  /**
+    * Cette fonction change l'état de suspension
+	*/
   public void suspendre() {
     mSuspendu = !mSuspendu;
     if (!mSuspendu) {
