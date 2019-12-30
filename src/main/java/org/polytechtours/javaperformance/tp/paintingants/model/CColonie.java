@@ -15,42 +15,43 @@ import org.polytechtours.javaperformance.tp.paintingants.control.PaintingAnts;
 
 public class CColonie implements Runnable {
 
-  private Boolean mContinue = Boolean.TRUE;
-  private Vector<CFourmi> mColonie;
-  private PaintingAnts mApplis;
+	private Boolean mContinue = Boolean.TRUE;
+	private Vector<CFourmi> mColonie;
+	private PaintingAnts mApplis;
 
-  /**
-   * Créer une nouvelle instance de CColonie
-   * @param pColonie
-   * @param pApplis
-   */
-  public CColonie(Vector<CFourmi> pColonie, PaintingAnts pApplis) {
-    mColonie = pColonie;
-    mApplis = pApplis;
-  }
+	/**
+	 * Créer une nouvelle instance de CColonie
+	 * 
+	 * @param pColonie
+	 * @param pApplis
+	 */
+	public CColonie(Vector<CFourmi> pColonie, PaintingAnts pApplis) {
+		mColonie = pColonie;
+		mApplis = pApplis;
+	}
 
-  /**
-   * Arrêter les threads 
-   */
-  public void pleaseStop() {
-    mContinue = false;
-  }
+	/**
+	 * Arrêter les threads
+	 */
+	public void pleaseStop() {
+		mContinue = false;
+	}
 
-  @Override
-  public void run() {
-    while (mContinue == true) {
-      if (!mApplis.getPause()) {
-        for (int i = 0; i < mColonie.size(); i++) {
-          mColonie.get(i).deplacer();
-          mApplis.compteur();
-        }
-      } else {
-        /*
-         * try { Thread.sleep(100); } catch (InterruptedException e) { break; }
-         */
+	@Override
+	public void run() {
+		while (mContinue == true) {
+			if (!mApplis.getPause()) {
+				for (int i = 0; i < mColonie.size(); i++) {
+					mColonie.get(i).deplacer();
+					mApplis.compteur();
+				}
+			} else {
+				/*
+				 * try { Thread.sleep(100); } catch (InterruptedException e) { break; }
+				 */
 
-      }
-    }
-  }
+			}
+		}
+	}
 
 }
