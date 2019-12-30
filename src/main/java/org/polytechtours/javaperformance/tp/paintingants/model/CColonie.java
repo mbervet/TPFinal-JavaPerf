@@ -19,12 +19,19 @@ public class CColonie implements Runnable {
   private Vector<CFourmi> mColonie;
   private PaintingAnts mApplis;
 
-  /** Creates a new instance of CColonie */
+  /**
+   * Créer une nouvelle instance de CColonie
+   * @param pColonie
+   * @param pApplis
+   */
   public CColonie(Vector<CFourmi> pColonie, PaintingAnts pApplis) {
     mColonie = pColonie;
     mApplis = pApplis;
   }
 
+  /**
+   * Arrêter les threads 
+   */
   public void pleaseStop() {
     mContinue = false;
   }
