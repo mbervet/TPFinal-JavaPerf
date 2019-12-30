@@ -8,26 +8,27 @@ import java.util.Random;
 import org.polytechtours.javaperformance.tp.paintingants.control.PaintingAnts;
 
 public class CFourmi {
-
-  // le generateur aleatoire (Random est thread safe donc on la partage)
-  private static Random GenerateurAleatoire = new Random();
-
-
-/**
+  /**
   * Tableau des incrémentations à effectuer sur la position des fourmis
   * en fonction de la direction du deplacement
   */
   private static final int[][] mIncDirection = {
-          {0, -1},
-          {1, -1},
-          {1, 0},
-          {1, 1},
-          {0, 1},
-          {-1, 1},
-          {-1, 0},
-          {-1, -1}
-  };
-
+    {0, -1},
+    {1, -1},
+    {1, 0},
+    {1, 1},
+    {0, 1},
+    {-1, 1},
+    {-1, 0},
+    {-1, -1}
+};
+  /** 
+   * le generateur aléatoire (Random est thread safe donc on la partage)
+   */ 
+  private static Random GenerateurAleatoire = new Random();
+  /**
+   * couleur déposé par la fourmi
+   */
   private Color mCouleurDeposee;
   /**
    * Luminance Couleur Suivie par la fourmi
@@ -37,35 +38,38 @@ public class CFourmi {
    * objet graphique sur lequel les fourmis peuvent peindre
    */
   private CPainting mPainting;
-
-  // Coordonnees de la fourmi
-
   /**
    * Coordonées de la fourmi
    */
-
   private int x, y;
   /**
    * Proba d'aller a gauche, en face, a droite, de suivre la couleur
    */
   private float[] mProba = new float[4];
-
-  // Numero de la direction dans laquelle la fourmi regarde
+  /**
+   * Numéro de la direction dans laquelle la fourmi regarde
+   */
   private int mDirection;
-  // Taille de la trace de pheromones deposee par la fourmi
+  /**
+   * Taille de la trace de phéromones déposée par la fourmi
+   */
   private int mTaille;
-  // Pas d'incrementation des directions suivant le nombre de directions
-  // allouees a la fourmies
-
+  /**
+   * Pas d'incrémentation des directions suivant le nombre de directions
+   * allouées à la fourmies
+   */
   private int mDecalDir;
   /**
    * l'applet
    */
   private PaintingAnts mApplis;
-
-  // seuil de luminance pour la detection de la couleur recherchee
+  /**
+   * seuil de luminance pour la détection de la couleur recherchée
+   */
   private float mSeuilLuminance;
-  // nombre de deplacements de la fourmi
+  /**
+   * nombre de déplacements de la fourmi
+   */
   private long mNbDeplacements;
 
   /**
@@ -122,7 +126,7 @@ public class CFourmi {
   /**
    * Fonction de deplacement de la fourmi
    */
-  public void deplacer() {
+  public synchronized void deplacer() {
     float tirage, prob1, prob2, prob3, total;
     int[] dir = new int[3];
     int i, j;
@@ -214,18 +218,20 @@ public class CFourmi {
     mApplis.IncrementFpsCounter();
   }
 
-/**
+  
+  /**
   * Retourne le nombre de déplacements de la fourmi
   * @return Le nombre de déplacement de la fourmi
   */ 
-  final public long getNbDeplacements() {
+  public long getNbDeplacements() {
     return mNbDeplacements;
   }
- /**
+
+  /**
   * Retourne la coordonnée en X de la fourmi
   * @return la coordonnée en X de la fourmi
   */
-  final public int getX() {
+  public int getX() {
     return x;
   }
 
@@ -233,7 +239,7 @@ public class CFourmi {
   * Retourne la coordonnée en Y de la fourmi
   * @return la coordonnée en Y de la fourmi
   */
-  final public int getY() {
+  public int getY() {
     return y;
   }
 
